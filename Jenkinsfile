@@ -1,31 +1,32 @@
-pipeline{
+pipeline {
     agent any
-      stages {
-        stage('Build maven'){
+    stages {
+        stage('Build maven') {
             steps {
                 sh 'pwd'
                 sh 'mvn clean install package'
             }
         }
-        stage('Copy Artifact'){
+        stage('Copy Artifact') {
             steps {
                 sh 'pwd'
                 sh 'cp -r target/*.jar docker'
             }
         }
-        stage('Run Tests'){
+        stage('Run Tests') {
             steps {
                 sh 'mvn test'
             }
-        }stage('Build docker image'){
+        }
+        stage('Build docker image') {
             steps {
                 script {
                     def customImage = docker.build("ajaz9565/petclinic:${env.BUILD_NUMBER}", "./docker")
-                    docker.withRegistry('https://hub.docker.com', 'dockerhub'){
-                    customImage.push()
+                    docker.withRegistry('https://hub.docker.com', 'dockerhub') {
+                        customImage.push()
                     }
                 }
             }
         }
-      }
+    }
 }
