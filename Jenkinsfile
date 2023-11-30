@@ -18,7 +18,7 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('Build docker image') {
+        stage('Build doc image') {
             steps {
                 script {
                     def customImage = docker.build("ajaz9565/petclinic:${env.BUILD_NUMBER}", "./docker")
